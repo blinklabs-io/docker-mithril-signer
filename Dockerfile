@@ -8,7 +8,7 @@ RUN echo "Building tags/${MITHRIL_VERSION}..." \
     && git checkout tags/${MITHRIL_VERSION} \
     && cargo build --release -p mithril-signer
 
-FROM ghcr.io/blinklabs-io/cardano-configs:20251009-1 AS cardano-configs
+FROM ghcr.io/blinklabs-io/cardano-configs:20251014-1 AS cardano-configs
 
 FROM debian:bookworm-slim AS mithril-signer
 COPY --from=rustbuilder /code/mithril/target/release/mithril-signer /bin/
