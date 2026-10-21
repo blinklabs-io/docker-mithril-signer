@@ -1,13 +1,16 @@
 FROM rust:bookworm AS rustbuilder
-# Can be a git tag or commit SHA
+# Full upstream commit SHA
 # 3f6cb73f491eb3195d02318643e40836fb093acc (0.13.20/2630.1-hotfix)
 ARG MITHRIL_VERSION=3f6cb73f491eb3195d02318643e40836fb093acc
 ENV MITHRIL_VERSION=${MITHRIL_VERSION}
 WORKDIR /code
-RUN echo "Building tags/${MITHRIL_VERSION}..." \
-    && git clone https://github.com/input-output-hk/mithril.git --depth 1 -b ${MITHRIL_VERSION} \
+RUN echo "Building ${MITHRIL_VERSION}..." \
+    && git init mithril \
     && cd mithril \
-    && git checkout tags/${MITHRIL_VERSION} \
+    && git remote add origin https://github.com/input-output-hk/mithril.git \
+    && git fetch --depth 1 origin "${MITHRIL_VERSION}" \
+    && git checkout --detach FETCH_HEAD \
+    && test "$(git rev-parse HEAD)" = "${MITHRIL_VERSION}" \
     && cargo build --release -p mithril-signer
 
 FROM ghcr.io/blinklabs-io/cardano-configs:20260915-1 AS cardano-configs
