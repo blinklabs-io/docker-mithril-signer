@@ -1,5 +1,7 @@
 FROM rust:bookworm AS rustbuilder
-ARG MITHRIL_VERSION=2630.1-hotfix
+# Can be a git tag or commit SHA
+# 3f6cb73f491eb3195d02318643e40836fb093acc (0.13.20/2630.1-hotfix)
+ARG MITHRIL_VERSION=3f6cb73f491eb3195d02318643e40836fb093acc
 ENV MITHRIL_VERSION=${MITHRIL_VERSION}
 WORKDIR /code
 RUN echo "Building tags/${MITHRIL_VERSION}..." \
