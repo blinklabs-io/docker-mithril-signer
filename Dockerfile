@@ -1,16 +1,21 @@
-FROM rust:bookworm AS rustbuilder
-ARG MITHRIL_VERSION=2630.1-hotfix
+FROM rust:bookworm@sha256:1cf87f5f66e57e896041fa6a125ae5a30a971f258274497e768f8036858de28c AS rustbuilder
+# Full upstream commit SHA
+# 3f6cb73f491eb3195d02318643e40836fb093acc (0.13.20/2630.1-hotfix)
+ARG MITHRIL_VERSION=3f6cb73f491eb3195d02318643e40836fb093acc
 ENV MITHRIL_VERSION=${MITHRIL_VERSION}
 WORKDIR /code
-RUN echo "Building tags/${MITHRIL_VERSION}..." \
-    && git clone https://github.com/input-output-hk/mithril.git --depth 1 -b ${MITHRIL_VERSION} \
+RUN echo "Building ${MITHRIL_VERSION}..." \
+    && git init mithril \
     && cd mithril \
-    && git checkout tags/${MITHRIL_VERSION} \
+    && git remote add origin https://github.com/input-output-hk/mithril.git \
+    && git fetch --depth 1 origin "${MITHRIL_VERSION}" \
+    && git checkout --detach FETCH_HEAD \
+    && test "$(git rev-parse HEAD)" = "${MITHRIL_VERSION}" \
     && cargo build --release -p mithril-signer
 
-FROM ghcr.io/blinklabs-io/cardano-configs:20260915-1 AS cardano-configs
+FROM ghcr.io/blinklabs-io/cardano-configs:20260915-1@sha256:d13289f8c094b8ec9e0f0c64888254c94183239400f9564fb933e323ee2fa5f7 AS cardano-configs
 
-FROM debian:bookworm-slim AS mithril-signer
+FROM debian:bookworm-slim@sha256:7ff6ba31527b9e336162fa061746c366c4b2032f4d2cff2078bea43f78efe3f8 AS mithril-signer
 COPY --from=rustbuilder /code/mithril/target/release/mithril-signer /bin/
 COPY --from=cardano-configs /config/ /opt/cardano/config/
 RUN apt-get update -y \
