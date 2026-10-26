@@ -1,4 +1,4 @@
-FROM rust:bookworm@sha256:1cf87f5f66e57e896041fa6a125ae5a30a971f258274497e768f8036858de28c AS rustbuilder
+FROM rust:bookworm@sha256:48b7f435b8fc6378ce43b44f15e3a47fd8919b2825f835c39bd4bd3da50af5b8 AS rustbuilder
 # Full upstream commit SHA
 # 3f6cb73f491eb3195d02318643e40836fb093acc (0.13.20/2630.1-hotfix)
 ARG MITHRIL_VERSION=3f6cb73f491eb3195d02318643e40836fb093acc
