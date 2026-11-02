@@ -15,7 +15,7 @@ RUN echo "Building ${MITHRIL_VERSION}..." \
 
 FROM ghcr.io/blinklabs-io/cardano-configs:20261024-1@sha256:99ac3a14c3c5969c95b3f791c89d851f68ef7c89a926a06d8fb03f2fa348075b AS cardano-configs
 
-FROM debian:bookworm-slim@sha256:7ff6ba31527b9e336162fa061746c366c4b2032f4d2cff2078bea43f78efe3f8 AS mithril-signer
+FROM debian:bookworm-slim@sha256:99c0b25c46d0214d5a2091092e7908907dcaecd6a962cde0ac700acee222b6f3 AS mithril-signer
 COPY --from=rustbuilder /code/mithril/target/release/mithril-signer /bin/
 COPY --from=cardano-configs /config/ /opt/cardano/config/
 RUN apt-get update -y \
