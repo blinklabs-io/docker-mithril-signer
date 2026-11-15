@@ -13,7 +13,7 @@ RUN echo "Building ${MITHRIL_VERSION}..." \
     && test "$(git rev-parse HEAD)" = "${MITHRIL_VERSION}" \
     && cargo build --release -p mithril-signer
 
-FROM ghcr.io/blinklabs-io/cardano-configs:20261027-1@sha256:f111e6bfd0d0332fa73d3aee857d13f32247a8e7cd8655df624f70e8b832ad0b AS cardano-configs
+FROM ghcr.io/blinklabs-io/cardano-configs:20261107-1@sha256:0ea3741c1fcef50c320c5696f2a0c70feb071855365c20f03088f4aae6e4c2fb AS cardano-configs
 
 FROM debian:bookworm-slim@sha256:734a72b3d6142a71993b4bc580ca01d8ca687f77a2c422d96a961d3376b179bc AS mithril-signer
 COPY --from=rustbuilder /code/mithril/target/release/mithril-signer /bin/
